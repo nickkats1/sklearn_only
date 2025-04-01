@@ -61,6 +61,9 @@ Desktop.ini
 
 
 *.ini.bak
+backups/
+defaults/
+*.ini
 #files that are not needed
 *.7z
 *.dmg
