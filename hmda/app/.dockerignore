@@ -1,0 +1,12 @@
+__pycache__/
+*pyc
+.ini
+.pynb
+.dockerignore
+.ipynb_checkpoints
+
+
+
+
+
+
