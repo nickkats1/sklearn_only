@@ -61,8 +61,7 @@ Desktop.ini
 
 
 *.ini.bak
-backups/
-defaults/
+
 
 #files that are not needed
 *.7z
