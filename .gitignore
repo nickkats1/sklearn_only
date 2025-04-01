@@ -18,7 +18,8 @@ ENV/
 env.bak/
 venv.bak/
 .conda/
-
+backups/
+defaults/
 # Jupyter Notebook stuff
 .virtual_documents/
 .ipynb_checkpoints/
@@ -61,8 +62,8 @@ Desktop.ini
 
 
 *.ini.bak
-backups/
-defaults/
+*.ini
+
 
 #files that are not needed
 *.7z
