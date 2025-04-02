@@ -333,7 +333,7 @@ print('R2 Score Best Linear Regression Model\n')
 print(r2_score(y_test, y_pred))
 
 
-joblib.dump(linear_regression_model,"lr_model.joblib")
+joblib.dump(linear_regression_model,"models/lr_model.joblib")
 
 ridge_model = Ridge(alpha=.001)
 ridge_model.fit(X_train,y_train)
@@ -343,18 +343,21 @@ print(r2_score(y_test, y_pred))
 
 lasso_model = Lasso(alpha=0.001).fit(X_train,y_train)
 y_pred = lasso_model.predict(X_test)
+print("Best Scores Lasso\n")
 print(r2_score(y_test, y_pred))
 
 
 
+
+
 features = X_train
-features.rename(columns={"pass":"pas"},inplace=True)
 
 
+joblib.dump(features,"models/features.joblib")
 
 
 def predict(model,features):
-    model = joblib.load("models/lasso.joblib")
+    model = joblib.load("models/lr_model.joblib")
     features = joblib.load("models/features.joblib")
     predictions = model.predict(features)
     return [[pred] for pred in predictions] 
