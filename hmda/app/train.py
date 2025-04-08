@@ -13,13 +13,14 @@ from sklearn.preprocessing import StandardScaler
 import joblib
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 warnings.filterwarnings("ignore")
 
 
 
-df = pd.read_csv("hmda.txt",delimiter="\t")
+df = pd.read_csv("../data/hmda.txt",delimiter="\t")
 
 print(df.isnull().sum())
 print(df.duplicated().sum())
@@ -110,6 +111,9 @@ X = df[selected_features]
 y = df['approved']
 
 X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=.20,random_state=42)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
 
 
 
@@ -148,12 +152,12 @@ models = {
 
 
 for model_name, model in models.items():
-    model.fit(X_train, y_train)
-    pred = model.predict(X_test)
-    pred_prob = model.predict_proba(X_test)[:,1]
+    model.fit(X_train_scaled, y_train)
+    pred = model.predict(X_test_scaled)
+    pred_prob = model.predict_proba(X_test_scaled)[:,1]
     acc = accuracy_score(y_test, pred)
     roc = roc_auc_score(y_test, pred_prob)
-    cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring="roc_auc")
+    cv_scores = cross_val_score(model, X_train_scaled, y_train, cv=5, scoring="roc_auc")
     evaluation_result = evaluate(y_test, pred, pred_prob, model_name, cv_scores)
     dict_list.append(evaluation_result)
 
@@ -166,12 +170,12 @@ print(df_results)
 
 
 
-def plot_roc_curve(models,X_test,y_test):
+def plot_roc_curve(models,X_test_scaled,y_test):
     plt.figure(figsize=(12,6))
     
     for model_name, model in models.items():
-        model.fit(X_train, y_train)
-        pred_prob = model.predict_proba(X_test)[:,1]
+        model.fit(X_train_scaled, y_train)
+        pred_prob = model.predict_proba(X_test_scaled)[:,1]
         fpr, tpr, _ = roc_curve(y_test, pred_prob)
         plt.plot(fpr, tpr, label=model_name)
     
@@ -183,7 +187,7 @@ def plot_roc_curve(models,X_test,y_test):
 
 
 
-plot_roc_curve(models, X_test, y_test)
+plot_roc_curve(models, X_test_scaled, y_test)
 
 
 
@@ -261,7 +265,7 @@ best_score = []
 
 for model_name,(model,params) in models.items():
     print(f'GridSearch For {model_name}:')
-    clf = GridSearchCV(model, params,cv=4,scoring="roc_auc",n_jobs=-1).fit(X_train,y_train)
+    clf = GridSearchCV(model, params,cv=4,scoring="roc_auc",n_jobs=-1).fit(X_train_scaled,y_train)
     print(f'Best Parameters for {model_name} : {clf.best_params_}')
     print(f'Best Average RocAuc Scores for: {model_name} : {clf.best_score_ * 100:.2f}%')
     best_score.append({"Model":model_name,"RocScore":clf.best_score_})
@@ -272,27 +276,19 @@ print(best_scores_df.head())
 
 
 
-gradient_boosting= GradientBoostingClassifier(learning_rate=0.05,max_depth=3,min_samples_split=5,n_estimators=100)
-gradient_boosting.fit(X_train,y_train)
-gradient_boosting_pred_prob = gradient_boosting.predict_proba(X_test)[:,1]
-print('Results From Optimal Logistic Regression model\n')
-print(round(roc_auc_score(y_test, gradient_boosting_pred_prob)*100,2))
+lr = LogisticRegression(C=0.1,max_iter=1000,penalty="l2",solver="liblinear")
+lr.fit(X_train_scaled,y_train)
 
 
 
-features = X_train
+joblib.dump(scaler,"models/scaler.joblib")
+
+
+joblib.dump(lr,"models/lr_model.joblib")
 
 
 
 
-joblib.dump(features,"models/features.joblib")
-
-
-joblib.dump(gradient_boosting,"models/gbr_model.joblib")
-
-
-features = joblib.load("models/features.joblib")
-model = joblib.load("models/gbr_model.joblib")
 
 def predict(model,features):
 
@@ -309,21 +305,19 @@ def predict(model,features):
 
 
 
-
-
 if __name__ == "__main__":
     
-    model = joblib.load("models/gbr_model.joblib")
-    features = joblib.load("models/features.joblib")
-    predictions, pred_probabilities = predict(model, features)
+    model = joblib.load("models/lr_model.joblib")
+    scaler = joblib.load("models/scaler.joblib")
+    features = [[0,1,1,0.1,1,1,1.1,1,1,0,0]]
+    features_scaled = scaler.transform(features)
+    predictions, predicted_probabilities = predict(model, features_scaled)
     ''' 1 == Approved; 0 == "denied'''
     print('Predictions:')
-    for i, (pred, prob) in enumerate(predictions):
-        if (i+1) % 10== 0:
-            print(f"Sample {i+1}: Prediction = {pred}, Probability of being approved/denied = {prob:.2f}")
+    for pred, pred_prob in zip(predictions,predicted_probabilities):
+        print(f"Sample: Prediction = {pred}, Probability of being approved/denied = {np.round(pred_prob,2)}")
 
-    print("Predicted Probabilities:")
-    print(pred_probabilities)
+
 
 
 

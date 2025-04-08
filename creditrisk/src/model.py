@@ -239,25 +239,18 @@ best_score_df = pd.DataFrame(best_score)
 print(best_score_df.head())
 
 
-bagging_clf = make_pipeline(ct,BaggingClassifier(max_features=0.6,max_samples=0.6,n_estimators=200)).fit(X_train,y_train)
-y_pred = bagging_clf.predict(X_test)
-y_pred_prob = bagging_clf.predict_proba(X_test)[:,1]
+
+
+
+
+pipe = make_pipeline(ct,RandomForestClassifier(criterion="entropy",max_depth=None,max_features="log2",min_samples_leaf=2,n_estimators=100))
+pipe.fit(X_train,y_train)
+pred = pipe.predict(X_test)
+pred_prob = pipe.predict_proba(X_test)[:,1]
 print('Accuracy of Optimized Bagging Classifier with Optimized HyperParamaeters\n')
-print(accuracy_score(y_test, y_pred))
+print(accuracy_score(y_test, pred))
 print('RocAuc Score of Bagging Classifier with Optimized Parameters\n')
-print(roc_auc_score(y_test,y_pred_prob))
-
-
-
-
-
-joblib.dump(bagging_clf,"models/bagging.joblib")
-
-
-
-
-features = df[X_train.columns]
-joblib.dump(features,"models/features.joblib")
+print(roc_auc_score(y_test,pred_prob))
 
 
 
@@ -280,7 +273,7 @@ def predict(model,features):
 
 if __name__ == "__main__":
     
-    model = joblib.load("models/bagging.joblib")
+    model = joblib.load("models/rfc.joblib")
     features = joblib.load("models/features.joblib")
     predictions, pred_probabilities = predict(model,features)
 
@@ -288,7 +281,5 @@ if __name__ == "__main__":
     for i, (pred, prob) in enumerate(predictions):
         if (i+1) % 10== 0:
             print(f"Sample {i+1}: Prediction = {pred}, Probability of Default = {prob:.2f}")
-
-
 
 

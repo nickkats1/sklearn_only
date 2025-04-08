@@ -7,7 +7,7 @@ app = FastAPI()
 
 
 model = joblib.load("models/gbr.joblib")
-features = joblib.load("models/features.joblib")
+scaler = joblib.load("models/scaler.joblib")
 
 class InputData(BaseModel):
     year: int
@@ -30,8 +30,9 @@ def index():
 def predict(data: InputData):
 
     input_data = pd.DataFrame([data.dict()])
+    scaled_data = scaler.fit_transform(input_data)
 
-    pred = model.predict(input_data)[0] 
+    pred = model.predict(scaled_data)[0] 
 
 
     return {

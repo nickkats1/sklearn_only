@@ -8,8 +8,8 @@ with open("models/gbc_clf.pkl","rb") as f:
     model = pickle.load(f)
 
 
-with open("models/features.pkl","rb") as f:
-    features = pickle.load(f)
+with open("models/scaler.pkl","rb") as f:
+    scaler = pickle.load(f)
 
 
 
@@ -35,16 +35,17 @@ class DependentVariable(BaseModel):
 
 
 @app.get('/')
-def index():
+async def index():
     return {'message': 'Churn Prediction'}
 
 @app.post("/predict/")
-def predict(data: InputData):
+async def predict(data: InputData):
 
     input_data = pd.DataFrame([data.dict()])
+    input_data_scaled = scaler.fit_transform(input_data)
 
-    pred = model.predict(input_data)[0] 
-    pred_prob = model.predict_proba(input_data)[0][1]
+    pred = model.predict(input_data_scaled)[0] 
+    pred_prob = model.predict_proba(input_data_scaled)[0][1]
 
     return {
         "Customer Churn Prediction": int(pred),

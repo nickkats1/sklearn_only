@@ -13,7 +13,7 @@ import joblib
 
 warnings.filterwarnings("ignore")
 
-df = pd.read_csv("dataset.csv",delimiter=',')
+df = pd.read_csv("../app/dataset.csv",delimiter=',')
 print(f'Null Values: {df.isnull().sum()}')
 print(f'Duplicated Values: {df.duplicated().sum()}')
 print(f'Unique Values: {df.nunique()}')
@@ -189,17 +189,11 @@ print(r2_score(y_test, y_pred))
 
 
 
-joblib.dump(gradient_boosting_regressor,"models/gbr.joblib")
-
-
-features_scaled = scaler.transform(X_train)
-joblib.dump(features_scaled,"models/features.joblib")
-
 
 
 
 def predict(model,features):
-    features = joblib.load("models/features.joblib")
+
     predictions = model.predict(features)
     return [[pred] for pred in predictions] 
 
@@ -207,11 +201,11 @@ if __name__ == "__main__":
 
     model = joblib.load("models/gbr.joblib")
 
-
-    features = joblib.load("models/features.joblib")
-
-
-    predictions = predict(model,features)
+    
+    features = X_train
+    scaler = joblib.load("models/scaler.joblib")
+    features_scaled = scaler.fit_transform(features)
+    predictions = predict(model,features_scaled)
 
 
     print("Predictions:")

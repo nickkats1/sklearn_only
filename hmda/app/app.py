@@ -4,9 +4,9 @@ import pandas as pd
 from pydantic import BaseModel
 
 
-model = joblib.load("models/gbr_model.joblib")
+model = joblib.load("models/lr_model.joblib")
+scaler = joblib.load("models/scaler.joblib")
 
-features = joblib.load("models/features.joblib")
 
 
 app = FastAPI()
@@ -26,9 +26,6 @@ class InputData(BaseModel):
 
 
 
-class DependentVariable(BaseModel):
-    predID: str
-    prediction: float
 
 
 
@@ -40,9 +37,10 @@ def index():
 def predict(data: InputData):
 
     input_data = pd.DataFrame([data.dict()])
+    data_scaled = scaler.transform(input_data)
 
-    pred = model.predict(input_data)[0] 
-    pred_prob = model.predict_proba(input_data)[0][1]
+    pred = model.predict(data_scaled)[0] 
+    pred_prob = model.predict_proba(data_scaled)[0][1]
 
     return {
         "Default Prediction": int(pred),

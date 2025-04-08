@@ -244,20 +244,18 @@ with open("models/gbc_clf.pkl","wb") as f:
     pickle.dump(gradientboosting_clf,f)
 
 
-features = scaler.transform(X_train)
 
-with open("models/features.pkl","wb") as f:
-    pickle.dump(features,f)
-
+with open("models/scaler.pkl","wb") as f:
+    pickle.dump(scaler,f)
 
 
 def predict(model,features):
-
+    
     predictions = model.predict(features)
     pred_probabilities = model.predict_proba(features)[:,1]
     
     
-
+    
     data = []
     for pred,pred_prob in zip(predictions,pred_probabilities):
         data.append([pred,pred_prob])
@@ -266,24 +264,23 @@ def predict(model,features):
 
 
 
-
-
 if __name__ == "__main__":
     
     with open("models/gbc_clf.pkl","rb") as f:
         model = pickle.load(f)
-        
-    with open("models/features.pkl",'rb') as f:
-        features = pickle.load(f)
     
-    predictions, pred_probabilities = predict(model, features)
+    
+    features = [[128,1,0,2.70,2,265.1,110,89.0,9.87,6.6]]
+    predictions, pred_probabilities = predict(model,features)
     print('Predictions:')
     for i, (pred, prob) in enumerate(predictions):
         if (i+1) % 10== 0:
-            print(f"Sample {i+1}: Prediction = {pred}, Probability of Churn = {prob:.2f}")
-
+            print(f"Prediction = {pred}, Probability of Churn = {prob:.2f}")
+    
     print("Predicted Probabilities:")
     print(pred_probabilities)
+
+
 
 
 
