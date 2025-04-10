@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicted Probability of Default</title>
+</head>
+<body>
+    <h1>Probability of Default</h1>
+    <p>The predicted probability a customer will be Approved/Denied is: {{pred_prob }}<br>
+    status:
+    {% if pred_prob > 0.5 %}
+        <strong>Approved</strong>
+        {% else %}
+            <string>Denied</string>
+            {% endif %}
+    </p>
+
+
+    <p><a href="/">Go back</a></p>
+</body>
+</html>

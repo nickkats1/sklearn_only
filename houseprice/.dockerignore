@@ -3,11 +3,10 @@ __pycache__/
 .ini
 .pynb
 .dockerignore
+.virtualenvironments
 .ipynb_checkpoints
-*.spyproject
+.spyproject
 *.log
-
-
-
-
+__pycache__
+.spyproject
 

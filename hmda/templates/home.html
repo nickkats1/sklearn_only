@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Default Prediction</title>
+</head>
+<body>
+    <h1>HMDA Default Prediction</h1>
+    <form action="/predict" method="post">
+        <label for="occupancy">occupancy:</label>
+        <input type="number" id="occupancy" name="occupancy" required><br><br>
+        <label for="race">race:</label>
+        <input type="number" id="race" name="race" required><br><br>
+        <label for="sex">sex:</label>
+        <input type="number" id="sex" name="sex" required><br><br>
+        <label for="income">income</label>
+        <input type="number"id="income" name="income"required><br><br>
+        <label for="married">married</label>
+        <input type="number"id="married" name="married" required><br><br>
+        <label for="credit_history">credit_history</label>
+        <input type="number"id="credit_history" name="credit_history" required><br><br>
+        <label for="di_ratio">di_ratio</label>
+        <input type="number"id="di_ratio"name="di_ratio" required><br><br>
+        <label for="pmi_denied">pmi_denied</label>
+        <input type="number" id="pmi_denied" name="pmi_denied" required><br><br>
+        <label for="unverifiable">unverifiable</label>
+        <input type="number" id="unverifiable" name="unverifiable" required><br><br>
+        <label for="pmi_sought">pmi_sought</label>
+        <input type="number" id="pmi_sought" name="pmi_sought" required><br><br>
+        <label for="vr">vr</label>
+        <input type="number" id="vr" name="vr" required><br><br>
+        <button type="submit">Predict</button>
+    </form>
+</body>
+</html>
