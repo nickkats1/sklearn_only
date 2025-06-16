@@ -1,0 +1,30 @@
+#data
+datalink: https://github.com/nickkats1/sklearn_only/blob/main/customers/data/raw/customers.csv
+dataname: customers
+dataraw_dir: data/raw/
+interim_dir: data/interim
+data_preprocessed: data/preprocessed
+
+
+
+
+#model
+model_path: models/model.joblib
+
+
+
+
+resultsrawpath: results/results_raw.joblib
+resultsevaluatedpath: results/results_evaluated.joblib
+
+
+
+#images
+imagesdir: images/
+
+#params
+model_name: RandomForestRegressor
+max_depth: 10
+min_samples_leaf: 1
+min_samples_split: 2
+n_estimators: 100

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/styles.css">
+    <title>Predicting Utility</title>
+</head>
+<body>
+    <h1>Predicting Log Odds Utility</h1>
+    <form action="/predict" method="post">
+        <label for="app_id">app_id:</label>
+        <input type="number" id="app_id" name="app_id" required><br><br>
+        <label for="ssn">ssn:</label>
+        <input type="number" id="ssn" name="ssn" required><br><br>
+        <label for="zip_code">zip_code:</label>
+        <input type="number" id="zip_code" name="zip_code" required><br><br>
+        <label for="income">income</label>
+        <input type="number"id="income" name="income"required><br><br>
+        <label for="homeownership">homeownership</label>
+        <input type="number"id="homeownership" name="homeownership" required><br><br>
+        <label for="purchases">purchases:</label>
+        <input type="number"id="purchases" name="purchases" required><br><br>
+        <label for="credit_limit">credit_limit</label>
+        <input type="number"id="credit_limit"name="credit_limit" required><br><br>
+        <label for="fico">fico</label>
+        <input type="number" id="fico" name="fico" required><br><br>
+        <label for="num_late">num_late</label>
+        <input type="number" id="num_late" name="num_late" required><br><br>
+        <label for="past_def">past_def</label>
+        <input type="number" id="past_def" name="past_def" required><br><br>
+        <label for="num_bankruptcy">num_bankruptcy</label>
+        <input type="number" id="num_bankruptcy" name="num_bankruptcy" required><br><br>
+        <label for="avg_income">avg_income</label>
+        <input type="number" id="avg_income" name="avg_income" required><br><br>
+        <label for="density">density</label>
+        <input type="number" id="density" name="density" required><bt></bt>
+        <button type="submit">Predict</button>
+    </form>
+</body>
+</html>
