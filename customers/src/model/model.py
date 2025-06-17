@@ -1,5 +1,5 @@
 from sklearn.ensemble import RandomForestRegressor
-import src.common.utils as tools
+
 
 
 class Model:

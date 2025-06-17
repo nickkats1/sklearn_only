@@ -1,0 +1,20 @@
+data_name: hmda
+
+#data
+raw_path: data/raw/
+url_name: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/hmda/data/hmda.txt
+preprocessed_path: data/preprocessed/
+interim_path: data/interim/
+
+#model
+model_path: models/model.joblib
+
+#results
+resultsrawpath: results/
+resultsevaluatedpath: results/
+
+
+
+
+
+

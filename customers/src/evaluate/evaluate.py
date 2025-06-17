@@ -1,6 +1,5 @@
 from sklearn.metrics import mean_squared_error,r2_score
-from src.common.utils import load_jobs,load_config,dump_jobs
-
+import src.common.utils as tools
 
 
 class Results:
@@ -15,18 +14,17 @@ class Results:
         self.metrics['r2_score'] = r2_score(self.y_test,self.y_pred)
         
     def print_metrics(self):
-        for k in self.metrics:
-            print(f"{k}=\n {self.metrics[k]}")
+        for key in self.metrics:
+            print(f"{key} =\n {self.metrics[key]}")
             
 
 
 if __name__ == "__main__":
-    config= load_config()
+    config= tools.load_config()
     
     resultspath = config["resultsrawpath"]
-    Results = load_config(resultspath)
+    Results = tools.load_jobs(resultspath)
     Results.get_metrics()
     Results.print_metrics()
-
     validationpath = config["resultsevaluatedpath"]
-    dump_jobs(validationpath,Results)
+    tools.dump_jobs(validationpath,Results)

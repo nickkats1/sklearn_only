@@ -1,9 +1,11 @@
 #data
-datalink: https://github.com/nickkats1/sklearn_only/blob/main/customers/data/raw/customers.csv
-dataname: customers
+datalink: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/customers/data/raw/customer.csv
+dataname: customer
 dataraw_dir: data/raw/
-interim_dir: data/interim
-data_preprocessed: data/preprocessed
+interim_dir: data/interim/
+data_preprocessed: data/processed/
+
+
 
 
 
@@ -16,7 +18,6 @@ model_path: models/model.joblib
 
 resultsrawpath: results/results_raw.joblib
 resultsevaluatedpath: results/results_evaluated.joblib
-
 
 
 #images

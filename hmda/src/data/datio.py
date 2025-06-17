@@ -8,7 +8,7 @@ def separate_xy(dataframe):
     return [X, y]
 
 def combine_xy(X,y):
-    return np.concatenate((X,y[:, np.newaxis]),axis=1)
+    return np.concatenate((X,y [:, np.newaxis]),axis=1)
 
 def load(datapath):
     dataset = pd.read_csv(datapath, header=0) 

@@ -60,6 +60,9 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
+#ignoring
+mlruns/
+
 
 *.ini.bak
 *.ini
