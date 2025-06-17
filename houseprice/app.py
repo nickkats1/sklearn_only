@@ -9,7 +9,7 @@ import os
 
 
 app = Flask(__name__)
-scaler = joblib.load("models/scaler.joblib")
+
 
 model = joblib.load("models/model.joblib")
 

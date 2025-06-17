@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 
 def seperateXY(dataframe):
     X = dataframe.iloc[:,:-1].values
-    y = dataframe.iloc[:,4].values
+    y = dataframe.iloc[:,12].values
     return [X,y]
     
 

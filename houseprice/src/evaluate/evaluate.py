@@ -16,8 +16,8 @@ class Results:
         self.metrics['r2_score'] = r2_score(self.y_test,self.y_pred)
         
     def print_metrics(self):
-        for k in self.metrics:
-            logger.info(f"{k}=\n {self.metrics[k]}")
+        for key in self.metrics:
+            print(f"{key}=\n {self.metrics[key]}")
             
 
 
