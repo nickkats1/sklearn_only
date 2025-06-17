@@ -5,7 +5,7 @@ package_name: dataset
 raw_data_file: data/raw_data/
 datainterimdirectory: data/interim/
 dataprocesseddirectory: data/processed/
-datalink: "https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/houseprice/data/dataset.csv"
+datalink: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/houseprice/data/raw_data/dataset.csv
 datainterim: data/interim/
 
 #train/test paths
@@ -19,7 +19,6 @@ dataprocessed: data/processed
 model_path: models/model.joblib
 resultsrawpath: results/results_raw.joblib
 resultsevaluatedpath: results/results_evaluated.joblib
-mlflowuri: "http://127.0.0.1:8080"
 
 
 #features

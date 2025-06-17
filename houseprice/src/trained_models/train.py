@@ -5,7 +5,7 @@ import src.data_processing.data_ingestion as dataio
 
 
 def train(config):
-    filepath = config["dataprocessed"] + "train.csv"
+    filepath = config["dataprocesseddirectory"] + "train.csv"
     [X,y] = dataio.load(filepath)
     
     Model = model.Model()

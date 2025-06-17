@@ -3,27 +3,20 @@ import joblib
 
 
 
-
 def load_config():
     with open("config.yaml") as p:
-        load_config = yaml.safe_load(p)
-        return load_config
-    
+        cfg_file = yaml.safe_load(p)
+        return cfg_file
 
 
 
-
-
-
-def dump_jobs(path,variable):
+def dump_jobs(variable,path):
     with open(path,"wb") as handle:
         joblib.dump(variable,handle)
 
 
 
-
 def load_jobs(path):
-    with open(path,"wb") as handle:
-        loaded_jobs = joblib.load(handle)
-        return loaded_jobs
-    
+    with open(path,"rb") as handle:
+        loaded = joblib.load(handle)
+        return loaded

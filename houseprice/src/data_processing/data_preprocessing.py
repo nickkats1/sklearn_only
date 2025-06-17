@@ -3,7 +3,7 @@ import src.data_processing.data_ingestion as dataio
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from src.common.utils import load_config
+
 
 def standardize_fit(X):
     scaler = StandardScaler()
@@ -24,7 +24,7 @@ def preprocess(config):
     [X,y] = dataio.load(rawdatapath)
     test_fraction = 0.3
     [X_train,X_test,y_train,y_test] = split(X,y,test_fraction)
-    savepath = config["datainterim"]
+    savepath = config["datainterimdirectory"]
     dataio.save(X_train,y_train,savepath + "train.csv")
     dataio.save(X_test,y_test,savepath + "test.csv")
     

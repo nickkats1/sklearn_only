@@ -1,42 +1,35 @@
 from flask import Flask,render_template,request
-import pickle
+import joblib
 import numpy as np
 import os
 
 
-with open("models/gbr.pkl","rb") as f:
-    model = pickle.load(f)
 
-
-with open("models/scaler.pkl","rb") as f:
-    scaler = pickle.load(f)
 
 
 
 app = Flask(__name__)
+scaler = joblib.load("models/scaler.joblib")
+
+model = joblib.load("models/model.joblib")
 
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return render_template("index.html")
 
 
 
 @app.route("/predict", methods=["POST"])
 def predict():
-
     int_features = [int(x) for x in request.form.values()]
     final_features = [np.array(int_features)]
     features_scaled = scaler.transform(final_features)
     prediction = model.predict(features_scaled)[0]
-
-
-
-    return render_template(
-        "result.html", prediction='The Predicted Price: ${}'.format(np.round(prediction,2)))
+    return render_template("results.html", prediction=prediction)
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=80)
 
 

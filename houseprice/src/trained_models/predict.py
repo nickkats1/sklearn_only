@@ -3,10 +3,10 @@ import src.data_processing.data_ingestion as dataio
 import src.common.utils as tools
 
 
-STAGE = "Predict"
+
 
 def predict(config):
-    filepath = config["dataprocessed"] + "test.csv"
+    filepath = config["dataprocesseddirectory"] + "test.csv"
     [X,y] = dataio.load(filepath)
     modelpath = config["model_path"]
     Model = tools.load_jobs(modelpath)
@@ -14,7 +14,7 @@ def predict(config):
     [yhat,classes] = Model.predict(X)
     Result = evaluate.Results(y,yhat,classes)
     resultspath = config["resultsrawpath"]
-    tools.joblib.dump(resultspath,Result)
+    tools.dump_jobs(resultspath,Result)
     
 
 
