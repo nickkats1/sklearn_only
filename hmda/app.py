@@ -6,7 +6,7 @@ import numpy as np
 logging.basicConfig(level=logging.INFO)
 
 
-model = joblib.load("models/lr_model.joblib")
+model = joblib.load("models/model.joblib")
 
 
 app = Flask(__name__)

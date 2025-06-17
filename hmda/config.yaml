@@ -10,10 +10,25 @@ interim_path: data/interim/
 model_path: models/model.joblib
 
 #results
-resultsrawpath: results/
-resultsevaluatedpath: results/
+resultsrawpath: results/results_raw.joblib
+resultsevaluatedpath: results/results_evaluated.joblib
+
+#used features
+features:
+  occupancy: int64
+  race: int64
+  sex: int64
+  married: int64
+  income: float64
+  credit_history: int64
+  di_ratio: float64
+  pmi_denied: int64
+  vr: int64
+  unverifiable : int64
+  pmi_sought: int64
 
 
+target: approved
 
 
 

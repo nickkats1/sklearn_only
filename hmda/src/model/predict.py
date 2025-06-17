@@ -12,7 +12,7 @@ def predict(config):
     [yhat,classes] = Model.predict(X)
     
     Result = evaluate.Results(y,yhat,classes)
-    Results_Path = config["resultsrawpath"]
+    Results_Path = config["raw_path"]
     tools.dump_jobs(Results_Path,Result)
 
 
