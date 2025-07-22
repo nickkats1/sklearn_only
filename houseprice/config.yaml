@@ -1,24 +1,60 @@
-package_name: dataset
+#data/
+data_raw: data/raw_data/dataset.csv
+raw_train: data/raw_data/train.csv
+raw_test: data/raw_data/test.csv
+processed_path: data/processed/
+processed_train: data/processed/train.csv
+processed_test: data/processed/test.csv
+
+url_link: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/houseprice/data/raw_data/dataset.csv
+
+#models
+model_path: models/
+trained_model_path: models/model.joblib
+scaler_path: models/scaler.joblib
 
 
-#data
-raw_data_file: data/raw_data/
-datainterimdirectory: data/interim/
-dataprocesseddirectory: data/processed/
-datalink: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/houseprice/data/raw_data/dataset.csv
-datainterim: data/interim/
 
-#train/test paths
-training_data_file: train.csv
-test_data_file: test.csv
+features:
+ - year
+ - age
+ - beds
+ - baths
+ - home_size
+ - parcel_size
+ - pool
+ - dist_cbd
+ - dist_lakes
+ - x_coord
+ - y_coord
 
-#images from training
-images_dir: images/
 
-dataprocessed: data/processed
-model_path: models/model.joblib
-resultsrawpath: results/results_raw.joblib
-resultsevaluatedpath: results/results_evaluated.joblib
+target: price
+#models
+
+
+
+
+
+test_size: 0.2
+random_state: 42
+
+
+
+#best model params
+
+model_name: GradientBoostingRegressor
+model_params:
+  learning_rate: 0.2
+  max_depth: 5
+  min_samples_split: 10
+  n_estimators: 200
+
+
+#mlflow
+
+experiment_name: "house-prices"
+
 
 
 
