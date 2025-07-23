@@ -4,9 +4,10 @@ __pycache__/
 .pynb
 .dockerignore
 .ipynb_checkpoints
-*.spyproject
 *.log
-
+*__pycache__/
+mlruns/
+logs/
 
 
 

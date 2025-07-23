@@ -1,34 +1,64 @@
-data_name: hmda
-
-#data
-raw_path: data/raw/
-url_name: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/hmda/data/hmda.txt
-preprocessed_path: data/preprocessed/
-interim_path: data/interim/
-
-#model
+#paths
+data_raw: data/raw/hmda.csv
+used_raw_path: data/clean.csv
+train_raw: data/raw/train.csv
+test_raw: data/raw/test.csv
 model_path: models/model.joblib
+processed_path: models/scaler.joblib
+url_link: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/hmda/data/raw/hmda.csv
+preprocessed_path: data/preprocessed/
+train_scaled_path: data/preprocessed/train.csv
+test_scaled_path: data/preprocessed/test.csv
 
-#results
-resultsrawpath: results/results_raw.joblib
-resultsevaluatedpath: results/results_evaluated.joblib
+#test size and random state
+random_state: 42
+test_size: .20
 
-#used features
+
+
+#used features(I changed the columns name to what their names were in the paper)
 features:
-  occupancy: int64
-  race: int64
-  sex: int64
-  married: int64
-  income: float64
-  credit_history: int64
-  di_ratio: float64
-  pmi_denied: int64
-  vr: int64
-  unverifiable : int64
-  pmi_sought: int64
+ - occupancy
+ - race
+ - sex
+ - income
+ - married
+ - credit_history
+ - di_ratio
+ - pmi_denied
+ - unverifiable
+ - pmi_sought
+ - vr
 
 
-target: approved
+
+target: approved # changed to approved 1 == 3; 0 for everything else; I changed this as well based on the paper written.
+
+
+all_variables:
+ - occupancy
+ - race
+ - sex
+ - income
+ - married
+ - credit_history
+ - di_ratio
+ - pmi_denied
+ - unverifiable
+ - pmi_sought
+ - vr
+ - approved # dependent variable
+
+
+
+
+#params of best model
+model_params:
+  C: 0.1
+  max_iter: 1000
+  penalty: l2
+  solver: liblinear
+
 
 
 
