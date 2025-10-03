@@ -1,12 +1,15 @@
-#data/
+# data paths
 data_raw: data/raw_data/dataset.csv
 raw_train: data/raw_data/train.csv
 raw_test: data/raw_data/test.csv
 processed_path: data/processed/
 processed_train: data/processed/train.csv
 processed_test: data/processed/test.csv
-
+train_target_raw: data/raw_data/y-train.csv
+test_target_raw: data/raw_data/y-test.csv
 url_link: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/houseprice/data/raw_data/dataset.csv
+
+
 
 #models
 model_path: models/
@@ -14,7 +17,7 @@ trained_model_path: models/model.joblib
 scaler_path: models/scaler.joblib
 
 
-
+# features for pipeline
 features:
  - year
  - age
@@ -28,27 +31,18 @@ features:
  - x_coord
  - y_coord
 
-
+# target variable
 target: price
-#models
 
 
-
-
-
+# train/test split
 test_size: 0.2
 random_state: 42
 
 
 
-#best model params
 
-model_name: GradientBoostingRegressor
-model_params:
-  learning_rate: 0.2
-  max_depth: 5
-  min_samples_split: 10
-  n_estimators: 200
+
 
 
 #mlflow

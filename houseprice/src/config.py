@@ -1,27 +1,19 @@
 import yaml
 import joblib
-from urllib.request import urlretrieve
 import os
-from pathlib import Path
 from src.logger import logger
-import requests
-from sklearn.model_selection import GridSearchCV
-from sklearn.linear_model import LinearRegression,Ridge,Lasso
-from sklearn.ensemble import GradientBoostingRegressor,BaggingRegressor
-from sklearn.metrics import r2_score,mean_squared_error
+from typing import Dict
 
 
 
 
 
 
-
-
-def load_config(config_path="config.yaml"):
+def load_config(config_path = "config.yaml") -> Dict:
     """Loads a YAML configuration file."""
     try:
-        with open(config_path, 'r') as f:
-            config = yaml.safe_load(f)
+        with open(config_path, 'r') as p:
+            config = yaml.safe_load(p)
         return config
     except FileNotFoundError:
         logger.info(f"Error: Configuration file '{config_path}' not found.")
@@ -34,7 +26,15 @@ def load_config(config_path="config.yaml"):
         return None
 
 
-
+def load_params(params_path = "params.yaml") -> Dict:
+    """ Load params.yaml"""
+    try:
+        with open(params_path,"r") as r:
+            param_config = yaml.safe_load(r)
+            return param_config
+    except yaml.YAMLError as exe:
+        logger.error(f'Could not parse Yaml file: {e}')
+        return None
 
 
 
@@ -68,6 +68,11 @@ def load_jobs(file_path):
     except Exception as e:
         raise e
 
+
+
+if __name__ == "__main__":
+    config = load_config()
+    params_config = load_params()
 
 
 
