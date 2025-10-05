@@ -3,6 +3,9 @@
 
 #raw_data
 data_raw: data/raw/customers.csv
+data_processed: data/processed/
+train_processed: data/processed/train.csv
+test_processed: data/processed/test.csv
 train_raw: data/raw/train.csv
 test_raw: data/raw/test.csv
 url_link: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/customers/data/raw/customers.csv

@@ -5,8 +5,7 @@ __pycache__/
 .dockerignore
 .virtualenvironments
 .ipynb_checkpoints
-.spyproject
 *.log
 __pycache__
-.spyproject
+
 
