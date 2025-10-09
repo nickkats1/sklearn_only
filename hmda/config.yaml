@@ -3,12 +3,16 @@ data_raw: data/raw/hmda.csv
 used_raw_path: data/clean.csv
 train_raw: data/raw/train.csv
 test_raw: data/raw/test.csv
+y_train_raw: data/raw/y_train_raw.csv
+y_test_raw: data/raw/y_test_raw.csv
 model_path: models/model.joblib
 processed_path: models/scaler.joblib
 url_link: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/hmda/data/raw/hmda.csv
-preprocessed_path: data/preprocessed/
+preprocessed_path: data/preprocessed/cleaned_hmda.csv
 train_scaled_path: data/preprocessed/train.csv
 test_scaled_path: data/preprocessed/test.csv
+
+
 
 #test size and random state
 random_state: 42
@@ -29,25 +33,14 @@ features:
  - unverifiable
  - pmi_sought
  - vr
-
-
+ - debt_to_expense
+ - chpr
+ - chcp
+ 
 
 target: approved # changed to approved 1 == 3; 0 for everything else; I changed this as well based on the paper written.
 
 
-all_variables:
- - occupancy
- - race
- - sex
- - income
- - married
- - credit_history
- - di_ratio
- - pmi_denied
- - unverifiable
- - pmi_sought
- - vr
- - approved # dependent variable
 
 
 

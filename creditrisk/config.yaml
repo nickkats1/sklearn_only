@@ -1,0 +1,41 @@
+# url path
+url_link: https://raw.githubusercontent.com/LeeMorinUCF/QMB6358S22/main/demo_24_Classification/credit.csv
+
+# data paths
+# raw paths
+raw_path: data/raw/data.csv
+train_raw: data/raw/train.csv
+test_raw: data/raw/test.csv
+train_target_raw: data/raw/y_train.csv
+test_target_raw: data/raw/y_test.csv
+
+#processed paths
+processed_path: data/processed/data_processed.csv
+train_processed: data/processed/train.csv
+test_processed: data/processed/test.csv
+
+
+features:
+ - checkingstatus1  
+ - duration         
+ - history              
+ - purpose             
+ - amount             
+ - savings              
+ - employ               
+ - installment          
+ - status               
+ - others               
+ - residence            
+ - property             
+ - age
+ - otherplans
+ - housing
+ - cards
+ - job
+ - liable
+ - tele
+ - foreign
+
+
+target: Default
