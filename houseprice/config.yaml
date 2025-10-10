@@ -40,7 +40,12 @@ test_size: 0.2
 random_state: 42
 
 
-
+# params of best model (Gradient Boosting Regressor)
+Gradient Boosting params:
+  max_depth: 5
+  min_samples_split: 10
+  n_estimators: 200
+  learning_rate: 0.2
 
 
 

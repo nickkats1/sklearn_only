@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-from helpers.config import load_config
-from helpers.logger import logger
-=======
 from utils.config import load_config
 from utils.logger import logger
->>>>>>> main
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 
@@ -31,11 +26,7 @@ class DataTransformation:
             return self.df_train_scaled,self.df_test_scaled
         except Exception as e:
             logger.exception(f"Could not transform data")
-<<<<<<< HEAD
-            raise e
-=======
             raise None
->>>>>>> main
         
 
 
@@ -43,7 +34,4 @@ if __name__ == "__main__":
     config = load_config()
     data_transformation_config = DataTransformation(config)
     data_transformation_config.transform_data()
-<<<<<<< HEAD
-=======
 
->>>>>>> main
