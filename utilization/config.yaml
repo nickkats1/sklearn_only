@@ -19,18 +19,11 @@ train_processed: data/processed/train.csv
 test_processed: data/processed/test.csv
 
 # model paths
-<<<<<<< HEAD
-<<<<<<< Updated upstream
+
 model_path: data/models/best_model.pkl
-=======
-model_path: models/
->>>>>>> main
-=======
-model_path: models/
-=======
-model_path: data/models/best_model.pkl
->>>>>>> edit
->>>>>>> Stashed changes
+
+
+
 
 
 features:
@@ -50,17 +43,7 @@ features:
  
 
 #target variable
-<<<<<<< HEAD
-<<<<<<< Updated upstream
+
 target: log_odds_utils
-=======
-target: log_odds_utils
- 
->>>>>>> main
-=======
-target: log_odds_utils
- 
-=======
-target: log_odds_utils
->>>>>>> edit
->>>>>>> Stashed changes
+
+

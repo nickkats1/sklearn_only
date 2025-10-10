@@ -38,18 +38,18 @@ class DataIngestion:
             features = data.drop('Default',axis=1)
             target = data['Default']
             
-            self.df_train,self.df_test = train_test_split(features,test_size=.20,random_state=42)
-            self.df_train.to_csv(self.config['train_raw'],index=0)
-            self.df_test.to_csv(self.config['test_raw'],index=0)
+            df_train,df_test = train_test_split(features,test_size=.20,random_state=42)
+            df_train.to_csv(self.config['train_raw'],index=0)
+            df_test.to_csv(self.config['test_raw'],index=0)
             
             # target features split
-            self.y_train_df,self.y_test_df = train_test_split(target,test_size=0.20,random_state=42)
-            self.y_train_df.to_csv(self.config['train_target_raw'],index=0)
-            self.y_test_df.to_csv(self.config['test_target_raw'],index=0)
+            y_train_df,y_test_df = train_test_split(target,test_size=0.20,random_state=42)
+            y_train_df.to_csv(self.config['train_target_raw'],index=0)
+            y_test_df.to_csv(self.config['test_target_raw'],index=0)
             
             
 
-        except FileExistsError as e:
+        except Exception as e:
             logger.exception(f"Could not find file: {e}")
             raise
 

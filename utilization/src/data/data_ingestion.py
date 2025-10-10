@@ -12,26 +12,26 @@ class DataIngestion:
         """ Fetch data from url links """
         # links to datasets
         try:
-            self.applications = pd.read_csv(self.config['applications_url'],delimiter=",")
-            self.demographic = pd.read_csv(self.config['demographic_url'],delimiter=",")
-            self.credit = pd.read_csv(self.config['credit_url'],delimiter=",")
-            self.combined = pd.concat([self.applications,self.credit,self.demographic],axis=1)
+            applications = pd.read_csv(self.config['applications_url'],delimiter=",")
+            demographic = pd.read_csv(self.config['demographic_url'],delimiter=",")
+            credit = pd.read_csv(self.config['credit_url'],delimiter=",")
+            combined = pd.concat([applications,credit,demographic],axis=1)
             # remove duplicated columns
-            self.combined = self.combined.loc[:,~self.combined.columns.duplicated()].copy()
+            combined = combined.loc[:,~combined.columns.duplicated()].copy()
             # creating variable utility
-            self.combined['Utility'] = self.combined['purchases'] / self.combined['credit_limit']
+            combined['Utility'] = combined['purchases'] / combined['credit_limit']
             
             # creating target variable log odds utility
-            self.combined['log_odds_utils'] = np.log(self.combined['Utility']) / (self.combined['Utility'] - 1)
+            combined['log_odds_utils'] = np.log(combined['Utility']) / (combined['Utility'] - 1)
             
             # making homeownership binary
-            self.combined['homeownership'] = [1 if X == "Rent" else 0 for X in self.combined['homeownership']] 
+            combined['homeownership'] = [1 if X == "Rent" else 0 for X in combined['homeownership']] 
             # drop utility
-            self.combined.drop("Utility",axis=1,inplace=True)
-            self.combined = self.combined.dropna()
-            self.combined.drop_duplicates(inplace=True)
-            self.combined.to_csv(self.config['raw_path'],index=0)
-            return self.combined
+            combined.drop("Utility",axis=1,inplace=True)
+            combined = combined.dropna()
+            combined.drop_duplicates(inplace=True)
+            combined.to_csv(self.config['raw_path'],index=0)
+            return combined
             
                 
         except Exception as e:
@@ -42,22 +42,23 @@ class DataIngestion:
         """ Split training and testing data """
         try:
             #features
-            self.features = self.combined.drop("log_odds_utils",axis=1)
-            self.target = self.combined['log_odds_utils']
+            combined = self.fetch_data()
+            features = combined.drop("log_odds_utils",axis=1)
+            target = combined['log_odds_utils']
             #train test split
             
-            self.df_train,self.df_test = train_test_split(self.features,test_size=0.20,random_state=42)
-            self.df_train.to_csv(self.config['train_raw'],index=0)
-            self.df_test.to_csv(self.config['test_raw'],index=0)
-            logger.info(f"Shape of df_train: {self.df_train.shape}")
-            logger.info(f"Shape of df_test: {self.df_test.shape}")            
+            df_train,df_test = train_test_split(features,test_size=0.20,random_state=42)
+            df_train.to_csv(self.config['train_raw'],index=0)
+            df_test.to_csv(self.config['test_raw'],index=0)
+            logger.info(f"Shape of df_train: {df_train.shape}")
+            logger.info(f"Shape of df_test: {df_test.shape}")            
             # split target values
-            self.y_train_df,self.y_test_df = train_test_split(self.target,test_size=.20,random_state=42)
-            self.y_train_df.to_csv(self.config['train_target_raw'],index=0)
-            self.y_test_df.to_csv(self.config['test_target_raw'],index=0)
-            logger.info(f'Shape of y_train_df: {self.y_train_df.shape}')
-            logger.info(f'Shape of y_test_df: {self.y_test_df.shape}')
-            return self.df_train,self.df_test,self.y_train_df,self.y_train_df
+            y_train_df,y_test_df = train_test_split(target,test_size=.20,random_state=42)
+            y_train_df.to_csv(self.config['train_target_raw'],index=0)
+            y_test_df.to_csv(self.config['test_target_raw'],index=0)
+            logger.info(f'Shape of y_train_df: {y_train_df.shape}')
+            logger.info(f'Shape of y_test_df: {y_test_df.shape}')
+
         except Exception as e:
             logger.exception(f'Could not find path: {e}')
             raise None
