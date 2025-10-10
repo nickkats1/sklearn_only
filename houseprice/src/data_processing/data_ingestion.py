@@ -61,7 +61,14 @@ if __name__ == "__main__":
     data_ingestion_config=  DataIngestion(config)
     data_ingestion_config.fetch_data()
 <<<<<<< HEAD
+<<<<<<< Updated upstream
     data_ingestion_config.load_data()
 =======
     data_ingestion_config.features_targets()
 >>>>>>> main
+=======
+    data_ingestion_config.features_targets()
+=======
+    data_ingestion_config.load_data()
+>>>>>>> edit
+>>>>>>> Stashed changes

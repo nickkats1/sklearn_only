@@ -1,10 +1,19 @@
 <<<<<<< HEAD
+<<<<<<< Updated upstream
 from helpers.config import load_config
 from helpers.logger import logger
 =======
 from utils.config import load_config
 from utils.logger import logger
 >>>>>>> main
+=======
+from utils.config import load_config
+from utils.logger import logger
+=======
+from helpers.config import load_config
+from helpers.logger import logger
+>>>>>>> edit
+>>>>>>> Stashed changes
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 
@@ -32,10 +41,17 @@ class DataTransformation:
         except Exception as e:
             logger.exception(f"Could not transform data")
 <<<<<<< HEAD
+<<<<<<< Updated upstream
             raise e
 =======
             raise None
 >>>>>>> main
+=======
+            raise None
+=======
+            raise e
+>>>>>>> edit
+>>>>>>> Stashed changes
         
 
 
@@ -44,6 +60,12 @@ if __name__ == "__main__":
     data_transformation_config = DataTransformation(config)
     data_transformation_config.transform_data()
 <<<<<<< HEAD
+<<<<<<< Updated upstream
 =======
 
 >>>>>>> main
+=======
+
+=======
+>>>>>>> edit
+>>>>>>> Stashed changes
