@@ -1,19 +1,5 @@
-<<<<<<< HEAD
-<<<<<<< Updated upstream
 from helpers.config import load_config
 from helpers.logger import logger
-=======
-from utils.config import load_config
-from utils.logger import logger
->>>>>>> main
-=======
-from utils.config import load_config
-from utils.logger import logger
-=======
-from helpers.config import load_config
-from helpers.logger import logger
->>>>>>> edit
->>>>>>> Stashed changes
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 
@@ -25,33 +11,25 @@ class DataTransformation:
     def transform_data(self):
         """ fetch data from DataIngestion and scaled the train test split"""
         try:
-            self.df_train = pd.read_csv(self.config['train_raw'],delimiter=",")
-            self.df_test = pd.read_csv(self.config['test_raw'],delimiter=",")
+            df_train = pd.read_csv(self.config['train_raw'],delimiter=",")
+            df_test = pd.read_csv(self.config['test_raw'],delimiter=",")
             
             # scaling data
             scaler = StandardScaler()
-            self.df_train_scaled = scaler.fit_transform(self.df_train)
-            self.df_test_scaled = scaler.transform(self.df_test)
+            df_train_scaled = scaler.fit_transform(df_train)
+            df_test_scaled = scaler.transform(df_test)
             # turning arrays to dataframe
-            self.df_train_scaled = pd.DataFrame(self.df_train_scaled)
-            self.df_test_scaled = pd.DataFrame(self.df_test_scaled)
-            self.df_train_scaled.to_csv(self.config['train_processed'],index=0)
-            self.df_test_scaled.to_csv(self.config['test_processed'],index=0)
-            return self.df_train_scaled,self.df_test_scaled
+            df_train_scaled = pd.DataFrame(df_train_scaled)
+            df_test_scaled = pd.DataFrame(df_test_scaled)
+            df_train_scaled.to_csv(self.config['train_processed'],index=0)
+            df_test_scaled.to_csv(self.config['test_processed'],index=0)
+
         except Exception as e:
-            logger.exception(f"Could not transform data")
-<<<<<<< HEAD
-<<<<<<< Updated upstream
+            logger.exception(f"{e}")
             raise e
-=======
-            raise None
->>>>>>> main
-=======
-            raise None
-=======
-            raise e
->>>>>>> edit
->>>>>>> Stashed changes
+
+
+
         
 
 
@@ -59,13 +37,3 @@ if __name__ == "__main__":
     config = load_config()
     data_transformation_config = DataTransformation(config)
     data_transformation_config.transform_data()
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-
->>>>>>> main
-=======
-
-=======
->>>>>>> edit
->>>>>>> Stashed changes
