@@ -8,9 +8,9 @@ from sklearn.ensemble import RandomForestRegressor,GradientBoostingRegressor
 from sklearn.svm import SVR
 from xgboost import XGBRegressor
 from sklearn.metrics import r2_score,mean_squared_error
-from utils.config import load_config
+from helpers.config import load_config
+from helpers.logger import logger
 
-logger = logging.getLogger(__name__)
 
 class ModelTrainer:
     def __init__(self,config):
