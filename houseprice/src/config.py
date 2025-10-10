@@ -1,9 +1,8 @@
 import yaml
-import joblib
-import os
+import pickle
 from src.logger import logger
 from typing import Dict
-
+import os
 
 
 
@@ -26,15 +25,7 @@ def load_config(config_path = "config.yaml") -> Dict:
         return None
 
 
-def load_params(params_path = "params.yaml") -> Dict:
-    """ Load params.yaml"""
-    try:
-        with open(params_path,"r") as r:
-            param_config = yaml.safe_load(r)
-            return param_config
-    except yaml.YAMLError as exe:
-        logger.error(f'Could not parse Yaml file: {e}')
-        return None
+
 
 
 
@@ -47,7 +38,7 @@ def save_jobs(file_obj, obj):
         os.makedirs(dir_path, exist_ok=True)
 
         with open(file_obj, "wb") as file_obj:
-            joblib.dump(obj, file_obj)
+            pickle.dump(obj, file_obj)
 
     except Exception as e:
         raise e
@@ -63,7 +54,7 @@ def load_jobs(file_path):
     '''
     try:
         with open(file_path, 'rb') as file_obj:
-            return joblib.load(file_obj)
+            return pickle.load(file_obj)
         
     except Exception as e:
         raise e
@@ -72,7 +63,7 @@ def load_jobs(file_path):
 
 if __name__ == "__main__":
     config = load_config()
-    params_config = load_params()
+
 
 
 
