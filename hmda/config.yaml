@@ -7,19 +7,14 @@ y_test_raw: data/raw/y_test_raw.csv
 model_path: models/model.joblib
 processed_path: models/scaler.joblib
 url_link: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/hmda/data/raw/hmda.csv
-<<<<<<< HEAD
+
+#processed paths
 preprocessed_path: data/preprocessed/cleaned_hmda.csv
 train_scaled_path: data/preprocessed/train.csv
 test_scaled_path: data/preprocessed/test.csv
 
 
 
-#test size and random state
-random_state: 42
-test_size: .20
-=======
-train_scaled_path: data/processed/train.csv
-test_scaled_path: data/processed/test.csv
 
 
 
@@ -93,11 +88,6 @@ unused_variables:
 
 
 
-
->>>>>>> a5b432d (full pipeline hmda)
-
-
-
 #used features(I changed the columns name to what their names were in the paper)
 features:
  - occupancy
@@ -115,14 +105,7 @@ features:
  - chcp
  - pmi_sought
  - vr
-<<<<<<< HEAD
- - debt_to_expense
- - chpr
- - chcp
-=======
 
->>>>>>> a5b432d (full pipeline hmda)
- 
 
 target: approved # changed to approved 1 == 3; 0 for everything else; I changed this as well based on the paper written.
 
@@ -131,15 +114,6 @@ target: approved # changed to approved 1 == 3; 0 for everything else; I changed 
 
 
 
-<<<<<<< HEAD
-#params of best model
-model_params:
-  C: 0.1
-  max_iter: 1000
-  penalty: l2
-  solver: liblinear
-=======
->>>>>>> a5b432d (full pipeline hmda)
 
 
 
