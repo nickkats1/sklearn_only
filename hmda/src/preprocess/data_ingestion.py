@@ -13,7 +13,6 @@ class DataIngestion:
         """ Fetch data from url """
         try:
             #url link
-<<<<<<< HEAD
             self.url_link = self.config['url_link']
             # raw path for the data ingestion
             
@@ -23,7 +22,6 @@ class DataIngestion:
             # data ingestion
             
             urlretrieve(url=self.url_link,filename=self.raw_path)
-=======
             URL_LINK = self.config['url_link']
             # raw path for the data ingestion
             
@@ -33,20 +31,15 @@ class DataIngestion:
             # data ingestion
             
             urlretrieve(url=URL_LINK,filename=RAW_PATH)
->>>>>>> a5b432d (full pipeline hmda)
+
             
         except Exception as e:
             raise e
         
         
-<<<<<<< HEAD
 
-if __name__ == "__main__":
-    config = load_config()
-    data_ingestion_config = DataIngestion(config)
-    data_ingestion_config.fetch_data()
-    
-=======
+
+
     def cleaning(self) -> pd.DataFrame:
         """ Clean features and select relevant variables """
         try:
@@ -137,4 +130,4 @@ if __name__ == "__main__":
         except Exception as e:
             raise e
         
->>>>>>> a5b432d (full pipeline hmda)
+
