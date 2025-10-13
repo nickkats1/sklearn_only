@@ -1,20 +1,27 @@
-# data paths
-data_raw: data/raw_data/dataset.csv
-raw_train: data/raw_data/train.csv
-raw_test: data/raw_data/test.csv
-processed_path: data/processed/
+# raw data path
+raw_path: data/raw/dataset.csv
+
+# raw train/test paths
+raw_train: data/raw/train.csv
+raw_test: data/raw/test.csv
+
+#processed train path
 processed_train: data/processed/train.csv
 processed_test: data/processed/test.csv
-train_target_raw: data/raw_data/y-train.csv
-test_target_raw: data/raw_data/y-test.csv
+
+# y_train,y_test path
+train_target_raw: data/raw/y-train.csv
+test_target_raw: data/raw/y-test.csv
+
+# url link for first part of data ingestion
 url_link: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/houseprice/data/raw_data/dataset.csv
 
 
 
 #models
 model_path: models/
-trained_model_path: models/model.joblib
-scaler_path: models/scaler.joblib
+trained_model_path: models/model.pkl
+scaler_path: models/scaler.pkl
 
 
 # features for pipeline

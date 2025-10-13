@@ -1,7 +1,6 @@
-from src.config import load_config,load_jobs
-from src.data_processing.data_transformation import DataTransformation
+from helpers.config import load_config,load_file
 import pandas as pd
-
+import numpy as np
 
 class PredictPipeline:
     def __init__(self,config):
@@ -11,14 +10,12 @@ class PredictPipeline:
         """ Predict model best model """
         try:
             model_path = self.config['trained_model_path']
-            model = load_jobs(model_path)
-            pred = model.predict(features)[0]
+            scaler_path = self.config['scaler_path']
+            model = load_file(model_path)
+            scaler = load_file(scaler_path)
+            scaled_features = scaler.fit_transform(features)
+            pred = model.predict(scaled_features)[0]
             return round(pred,2)
         except Exception as e:
             raise e
 
-
-if __name__ == "__main__":
-    config = load_config()
-    pred_pipeline_config = PredictPipeline(config)
-    pred_pipeline_config.predict_pipeline()

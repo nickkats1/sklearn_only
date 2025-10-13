@@ -1,87 +1,81 @@
-import pandas as pd
-import numpy as np
-import mlflow
-import mlflow.sklearn
-from sklearn.linear_model import LinearRegression,Ridge,Lasso
-from sklearn.ensemble import RandomForestRegressor,GradientBoostingRegressor
-from sklearn.svm import SVR
-from xgboost import XGBRegressor
+from sklearn.model_selection import GridSearchCV
+from sklearn.linear_model import LinearRegression,Lasso,Ridge
 from sklearn.metrics import r2_score,mean_squared_error
-from src.config import load_config
-from src.logger import logger
+from sklearn.ensemble import GradientBoostingRegressor,BaggingRegressor
+import pandas as pd
+import mlflow
+from helpers.logger import logger
+from helpers.config import load_config
 
 
 class ModelTrainer:
     def __init__(self,config):
         self.config = config
         
-    def fetch_data(self):
-        """Training and testing processed data"""
+    def models_params(self):
+        """ Define models and params for Grid Search """
         try:
-            # training and testing scaled path
+            self.params = {
+                "LinearRegression_params": {
+                    "copy_X": [True,False],
+                    "fit_intercept": [True,False],
+                    "positive":[True,False]
+                },
+                "Lasso_params": {
+                    "alpha": [1e-15,1e-10,1e-8,1e-3,1e-2,1,5,10,20,30,35,40,45,50,55,100]
+                },
+                "Ridge_params": {
+                    "alpha": [1e-15,1e-10,1e-8,1e-3,1e-2,1,5,10,20,30,35,40,45,50,55,100]
+                },
+                "GradientBoostingRegressor_params": {
+                    "n_estimators": [50,100,200],
+                    "learning_rate": [0.01,0.1,0.2],
+                    "max_depth": [3,4,5],
+                    "min_samples_split": [2,5,10]
+                },
+                "BaggingRegressor_params": {
+                    "n_estimators": [50,100,200],
+                    "max_samples" : [1.0,0.8,0.6],
+                    "max_features": [1.0,0.8,0.6]
+                },
+            }
+        
+            self.models = {
+                "LinearRegression":(LinearRegression(),self.params["LinearRegression_params"]),
+                "Lasso": (Lasso(),self.params["Lasso_params"]),
+                "Ridge": (Ridge(),self.params['Ridge_params']),
+                "GradientBoostingRegressor": (GradientBoostingRegressor(),self.params["GradientBoostingRegressor_params"]),
+                "BaggingRegressor": (BaggingRegressor(),self.params["BaggingRegressor_params"])
+            }
+            return self.params,self.models
+        except Exception as e:
+            raise
+        
+    
+    def log_into_mlflow(self):
+        """ log params and model metrics into mlflow """
+        try:
+            # models
             df_train_scaled = pd.read_csv(self.config['processed_train'],delimiter=",")
             df_test_scaled = pd.read_csv(self.config['processed_test'],delimiter=",")
-            #target variable for y
-            y_train_df = pd.read_csv(self.config['train_target_raw'],delimiter=",")
-            y_test_df = pd.read_csv(self.config['test_target_raw'],delimiter=",")
-            return df_train_scaled,df_test_scaled,y_train_df,y_test_df
+            y_train = pd.read_csv(self.config['train_target_raw'],delimiter=",")
+            y_test = pd.read_csv(self.config['test_target_raw'],delimiter=",")
+            mlflow.set_experiment("house-price-pipeline=v3")
+            for model_name,(model,params) in self.models.items():
+                with mlflow.start_run(run_name=model_name):
+                    grid_search = GridSearchCV(model,params,cv=4,scoring="neg_mean_squared_error",n_jobs=-1)
+                    grid_search.fit(df_train_scaled,y_train.values.ravel())
+                    pred = grid_search.predict(df_test_scaled)
+                    r2 = r2_score(y_test,pred)
+                    mse = mean_squared_error(y_test,pred)
+                    mlflow.log_params(grid_search.best_params_)
+                    mlflow.log_metric("best score",grid_search.best_score_)
+                    mlflow.log_metric("mean squared error",mse)
+                    mlflow.log_metric("R2 Score",r2)
+                    mlflow.sklearn.log_model(grid_search.best_estimator_, "best_estimator")
+                    logger.info(f"Model Name: {model_name}; R2 Score: {r2*100:.2f}; MSE: {mse:.4f}")
+                    
+                    
+                    
         except Exception as e:
-            logger.exception(f'Could not load data: {e}')
-            raise
-        
-    def load_models(self):
-        """models from training and test data"""
-        try:
-            models = {
-                "Linear Regression":LinearRegression(),
-                "Ridge Regressor":Ridge(),
-                "Lasso Regressor": Lasso(),
-                "Random Forest Regressor": RandomForestRegressor(),
-                "XGB Regressor": XGBRegressor(),
-                "SVM Regressor":SVR(),
-                "Gradient Boosting Regressor":GradientBoostingRegressor()
-            }
-            return models
-        except Exception as e:
-            logger.exception(f"error loading models")
-            raise
-        
-
-        
-    def log_into_mlflow(self):
-        """Log results into mlflow"""
-        mlflow.set_experiment("utils pipeline")
-        models = self.load_models()
-        
-        # load in data
-        df_train_scaled = pd.read_csv(self.config['processed_train'],delimiter=",")
-        df_test_scaled = pd.read_csv(self.config['processed_test'],delimiter=",")
-        y_train_df = pd.read_csv(self.config['train_target_raw'],delimiter=",")
-        y_test_df = pd.read_csv(self.config['test_target_raw'],delimiter=",")
-        with mlflow.start_run():
-            for model_name,model in models.items():
-                model.fit(df_train_scaled,y_train_df)
-                pred = model.predict(df_test_scaled)
-                r2 = r2_score(y_test_df,pred)
-                mse = mean_squared_error(y_test_df,pred)
-                print(f'Model Name: {model_name}')
-                print(f'R2 Score: {r2*100:.2f}')
-                print(f'Mean Squared Error: {mse:.4f}')
-                mlflow.log_metric("train score",model.score(df_train_scaled,y_train_df))
-                mlflow.log_metric("test score",model.score(df_test_scaled,y_test_df))
-                mlflow.log_metric("r2 score",r2)
-                mlflow.log_metric("mean squared error score",mse)
-                mlflow.sklearn.log_model("model name",model_name)
-                
-                
-
-    
-                
-                
-            
-if __name__ == "__main__":
-    config = load_config()
-    model_trainer_config = ModelTrainer(config)
-    model_trainer_config.fetch_data()
-    model_trainer_config.load_models()
-    model_trainer_config.log_into_mlflow()
+            raise e

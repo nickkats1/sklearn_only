@@ -1,6 +1,6 @@
 import yaml
 import pickle
-from src.logger import logger
+from helpers.logger import logger 
 from typing import Dict
 import os
 
@@ -31,7 +31,7 @@ def load_config(config_path = "config.yaml") -> Dict:
 
 
 
-def save_jobs(file_obj, obj):
+def save_file(file_obj, obj):
     try:
         dir_path = os.path.dirname(file_obj)
 
@@ -48,7 +48,7 @@ def save_jobs(file_obj, obj):
 
 
 
-def load_jobs(file_path):
+def load_file(file_path):
     '''
     loading joblib files
     '''
@@ -58,21 +58,5 @@ def load_jobs(file_path):
         
     except Exception as e:
         raise e
-
-
-
-if __name__ == "__main__":
-    config = load_config()
-
-
-
-
-
-
-
-
-    
-    
-
 
 
