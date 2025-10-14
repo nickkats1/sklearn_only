@@ -1,4 +1,4 @@
-import joblib
+import pickle
 import yaml
 import os
 from helpers.logger import logger
@@ -26,27 +26,27 @@ def load_config(config_path="config.yaml"):
 
 
 
-def save_jobs(file_path, obj):
+def save_file(file_path, obj):
     try:
         dir_path = os.path.dirname(file_path)
 
         os.makedirs(dir_path, exist_ok=True)
 
         with open(file_path, "wb") as file_obj:
-            joblib.dump(obj, file_obj)
+            pickle.dump(obj, file_obj)
 
     except Exception as e:
         raise e
 
 
 
-def load_jobs(file_path):
+def load_file(file_path):
     '''
-    loading joblib files
+    loading .pkl file
     '''
     try:
         with open(file_path, 'rb') as file_obj:
-            return joblib.load(file_obj)
+            return pickle.load(file_obj)
         
     except Exception as e:
         raise e

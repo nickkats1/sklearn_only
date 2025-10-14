@@ -9,7 +9,7 @@ from helpers.config import load_config
 
 
 class ModelTrainer:
-    def __init__(self,config):
+    def __init__(self, config):
         self.config = config
         
     def models_params(self):
