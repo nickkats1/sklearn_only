@@ -1,0 +1,52 @@
+
+# url links
+airplane_sales_link: https://raw.githubusercontent.com/LeeMorinUCF/QMB6358F23/refs/heads/main/final_exam_2020/airplane_sales.csv
+airplane_specs_link: https://raw.githubusercontent.com/LeeMorinUCF/QMB6358F23/refs/heads/main/final_exam_2020/airplane_specs.csv
+airplane_perf_link: https://raw.githubusercontent.com/LeeMorinUCF/QMB6358F23/refs/heads/main/final_exam_2020/airplane_perf.csv
+
+# data paths
+raw_path: data/raw/data.csv
+train_raw: data/raw/train.csv
+test_raw: data/raw/test.csv
+# data paths for target
+y_train_path: data/raw/y_train.csv
+y_test_path: data/raw/y_test.csv
+
+# processed path
+train_processed: "data/processed/train.csv"
+test_processed: "data/processed/test.csv"
+
+# model path
+models_path: models/
+
+# features to log transform
+
+log_features:
+ - horse
+ - fuel
+ - ceiling
+ - cruise
+
+
+
+# features
+
+features:
+ - age
+ - pas
+ - fixgear
+ - tdrag
+ - horse
+ - fuel
+ - ceiling
+ - cruise
+
+
+
+# target
+target: price
+
+
+
+
+

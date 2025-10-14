@@ -61,11 +61,4 @@ class DataIngestion:
 
         except Exception as e:
             logger.exception(f'Could not find path: {e}')
-            raise None
-        
-
-if __name__ == "__main__":
-    config = load_config()
-    data_ingestion_config = DataIngestion(config)
-    data_ingestion_config.fetch_data()
-    data_ingestion_config.split()
+            raise

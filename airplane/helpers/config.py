@@ -1,18 +1,16 @@
+import joblib
 import yaml
-import pickle
-from src.logger import logger
-from typing import Dict
 import os
+from helpers.logger import logger
 
 
 
 
-
-def load_config(config_path = "config.yaml") -> Dict:
+def load_config(config_path="config.yaml"):
     """Loads a YAML configuration file."""
     try:
-        with open(config_path, 'r') as p:
-            config = yaml.safe_load(p)
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
         return config
     except FileNotFoundError:
         logger.info(f"Error: Configuration file '{config_path}' not found.")
@@ -28,23 +26,17 @@ def load_config(config_path = "config.yaml") -> Dict:
 
 
 
-
-
-
-def save_jobs(file_obj, obj):
+def save_jobs(file_path, obj):
     try:
-        dir_path = os.path.dirname(file_obj)
+        dir_path = os.path.dirname(file_path)
 
         os.makedirs(dir_path, exist_ok=True)
 
-        with open(file_obj, "wb") as file_obj:
-            pickle.dump(obj, file_obj)
+        with open(file_path, "wb") as file_obj:
+            joblib.dump(obj, file_obj)
 
     except Exception as e:
         raise e
-
-
-            
 
 
 
@@ -54,25 +46,7 @@ def load_jobs(file_path):
     '''
     try:
         with open(file_path, 'rb') as file_obj:
-            return pickle.load(file_obj)
+            return joblib.load(file_obj)
         
     except Exception as e:
         raise e
-
-
-
-if __name__ == "__main__":
-    config = load_config()
-
-
-
-
-
-
-
-
-    
-    
-
-
-

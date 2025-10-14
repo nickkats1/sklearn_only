@@ -1,47 +1,34 @@
-from src.config import load_config
-from src.logger import logger
+from helpers.config import load_config
+from helpers.logger import logger
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
-
 
 
 class DataTransformation:
     def __init__(self,config):
         self.config = config
         
-        
-    def standardize_data(self):
-        """ use standard scaler to standardize data """
+    def standardize_data(self) -> pd.DataFrame:
+        """ Standardize X_train,X_test """
         try:
-            self.df_train = pd.read_csv(self.config['raw_train'],delimiter=",")
-            self.df_test = pd.read_csv(self.config['raw_test'],delimiter=",")
+            df_train = pd.read_csv(self.config['raw_train'],delimiter=",")
+            df_test = pd.read_csv(self.config['raw_test'],delimiter=",")
             
-            # use standard scaler to scale data y_train and y_test are not needed
+            # scaler X_train,X_test using standard scaler
             
             scaler = StandardScaler()
+            df_train_scaled = scaler.fit_transform(df_train)
+            df_test_scaled = scaler.transform(df_test)
+            # convert to dataframe
+            df_train_scaled = pd.DataFrame(df_train_scaled)
+            df_test_scaled = pd.DataFrame(df_test_scaled)
             
-            self.df_train_scaled = scaler.fit_transform(self.df_train)
-            self.df_test_scaled = scaler.transform(self.df_test)
+            # save transformed data to processed path
             
-            # turn each into a dataframe to the be turned into a .csv file
-            
-            self.df_train_scaled = pd.DataFrame(self.df_train_scaled)
-            self.df_test_scaled = pd.DataFrame(self.df_test_scaled)
-            
-            # convert each dataframe to_csv
-            self.df_train_scaled.to_csv(self.config['processed_train'],index=0)
-            self.df_test_scaled.to_csv(self.config['processed_test'],index=0)
-            return self.df_train_scaled,self.df_test_scaled
-        
+            df_train_scaled.to_csv(self.config['processed_train'],index=0)
+            df_test_scaled.to_csv(self.config['processed_test'],index=0)
+
         
         except Exception as e:
-            logger.exception(f'Could not load files: {e}')
-        raise e
-
-
-if __name__ == "__main__":
-    config = load_config()
-    data_transformation_config = DataTransformation(config)
-    data_transformation_config.standardize_data()
-
+            raise e
 

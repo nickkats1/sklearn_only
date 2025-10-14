@@ -1,32 +1,24 @@
-#data
-
-
-#raw_data
-data_raw: data/raw/customers.csv
-data_processed: data/processed/
-train_processed: data/processed/train.csv
-test_processed: data/processed/test.csv
+# raw paths
+raw_path: data/raw/data.csv
 train_raw: data/raw/train.csv
 test_raw: data/raw/test.csv
-url_link: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/customers/data/raw/customers.csv
+train_target_raw: data/raw/y_train.csv
+test_target_raw: data/raw/y_test.csv
 
-#processed data
+#processed paths
 processed_path: data/processed/
-processed_train: data/processed/trian.csv
-processed_test: data/processed/test.csv
-
-
-#model paths
-
-
-
+train_processed: data/processed/train.csv
+test_processed: data/processed/test.csv
 
 # model paths
-trained_model_path: models/model.joblib
-preprocessed_path: models/scaler.joblib
+
+model_path: models/best_model.pkl
+
+
+
+
 
 features:
- - app_id
  - ssn
  - zip_code
  - income
@@ -38,16 +30,14 @@ features:
  - past_def
  - num_bankruptcy
  - avg_income
+ - avg_income
  - density
  
 
+#target variable
 
 target: log_odds_utils
 
-
-#params
-test_size: 0.2
-random_state: 42
 
 
 
