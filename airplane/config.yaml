@@ -17,7 +17,7 @@ train_processed: "data/processed/train.csv"
 test_processed: "data/processed/test.csv"
 
 # model path
-models_path: models/
+model_path: artifacts/best_model.pkl
 
 # features to log transform
 
