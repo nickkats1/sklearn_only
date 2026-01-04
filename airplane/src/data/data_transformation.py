@@ -37,7 +37,7 @@ class DataTransformation:
         """
         try:
             # load in data from data ingestion.
-            data = DataIngestion(self.config).fetch_data()
+            data = DataIngestion(self.config).fetch_raw_data()
             
         except ImportError or FileNotFoundError as exc:
             logger.info(f"Could not import data ingestion or file was not found: {exc}")
@@ -71,7 +71,7 @@ class DataTransformation:
         
         try:
             # targets
-            data = DataIngestion(self.config).fetch_data()
+            data = DataIngestion(self.config).fetch_raw_data()
             targets = self.config['target']
             
             y_train, y_test = train_test_split(data[targets], test_size=0.20, random_state=42)
