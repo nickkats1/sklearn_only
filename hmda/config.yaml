@@ -1,25 +1,11 @@
 #paths
-data_raw: data/raw/hmda.csv
-train_raw: data/raw/train.csv
-test_raw: data/raw/test.csv
-y_train_raw: data/raw/y_train_raw.csv
-y_test_raw: data/raw/y_test_raw.csv
-model_path: models/model.joblib
-processed_path: models/scaler.joblib
-url_link: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/hmda/data/raw/hmda.csv
-
-#processed paths
-preprocessed_path: data/preprocessed/cleaned_hmda.csv
-train_scaled_path: data/preprocessed/train.csv
-test_scaled_path: data/preprocessed/test.csv
-
-
-
-
+raw_path: data/raw/hmda.txt
+model_path: artifacts/model.pkl
+url_link: https://raw.githubusercontent.com/nickkats1/sklearn_only/refs/heads/main/hmda/data/raw/hmda.txt
 
 
 # variables
-variables:
+features:
  - occupancy
  - approved
  - loan_amount # in thousands

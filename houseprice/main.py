@@ -1,26 +1,44 @@
-from src.data_processing.data_ingestion import DataIngestion
-from src.data_processing.data_transformation import DataTransformation
-from src.data_processing.model_trainer import ModelTrainer
-from helpers.config import load_config
+# data
+from src.data.data_ingestion import DataIngestion
+from src.data.data_transformation import DataTransformation
 
+# models
+from src.models.model_trainer import ModelTrainer
+from src.models.evaluate import Evaluate
+from src.models.predict import Predict
+
+# config
+from helpers.config import load_config
 
 
 if __name__ == "__main__":
     config = load_config()
     
     # data ingestion
-    data_ingestion_config = DataIngestion(config)
-    data_ingestion_config.fetch_data()
-    data_ingestion_config.split()
     
+    data = DataIngestion(config).get_data()
     
     # data transformation
-    
-    data_transformation_config = DataTransformation(config)
-    data_transformation_config.standardize_data()
+    X_train_scaled, X_test_scaled = DataTransformation(config).split_transform_features()
+    y_train, y_test = DataTransformation(config).split_targets()
     
     # model trainer
+    mt = ModelTrainer(config)
+    mt.train_models()
     
-    model_trainer_config = ModelTrainer(config)
-    model_trainer_config.models_params()
-    model_trainer_config.log_into_mlflow()
+    # evaluate best model
+    
+    eval = Evaluate(config)
+    y_test = [0,110,12,3,4,5,6,67,8,1,23]
+    y_pred = [110, 23, 3, 4, 6, 7, 8.7, 8, 12, 11]
+    
+    results = eval.eval_best_model(y_test, y_pred)
+    results
+    
+    # predict
+    
+    predict = Predict(config)
+    
+    features = [0,110,12,3,4,5,6,67,8,1,23]
+    prediction = predict.predict_pipeline(features)
+    print(f"Predicted price: {prediction}")

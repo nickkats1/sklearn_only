@@ -23,8 +23,9 @@ from helpers.config import load_config
 from helpers.logger import logger
 
 # pandas, numpy and typing
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
+import os
 
 class ModelTrainer:
     """Module to train and perform grid-search for optimal hyper-parameters for best model."""
@@ -40,12 +41,12 @@ class ModelTrainer:
         self.data = data or DataTransformation(self.config)
     
         
-    def load_models_and_params(self) -> List[Dict[str, Any]]:
+    def load_models_and_params(self) -> Tuple[Dict[str, List[Any]], Dict[str, Tuple[Any, Dict[str, Any]]]]:
         """Load in hyper-parameters from sklearn models and models with the parameters.
         
         Returns:
-            params (List[Dict, Any]): model name with parameters for GridSearchCV.
-            models (List[Dict, Any]): models with hyper parameters.
+            params, models (Tuple[Dict[str, List[Any]], Dict[str, Tuple[Any, Dict[str, Any]]]]): 
+                -model name with parameters for GridSearchCV.
         """
         try:
             # load in models with parameters
@@ -113,16 +114,17 @@ class ModelTrainer:
     def get_best_model(self) -> None:
         """Perform GridSearch on models"""
         try:
+            os.makedirs(self.config['model_path'], exist_ok=True)
             # load in X_train_scaled, X_test_scaled, y_train, y_test
             
             X_train_scaled, X_test_scaled = self.data.split_and_scale_features()
             y_train, y_test = self.data.split_targets()
             
             # params and models
-            params, models = self.load_models_and_params()
+            _, models = self.load_models_and_params()
             
             
-            # GridSearchCV and logging through MlFlow.
+            # GridSearchCV
             for model_name, (model, param) in models.items():
       
                 grid_search = GridSearchCV(model, param, cv=4, scoring="roc_auc", n_jobs=-1)
@@ -159,6 +161,7 @@ class ModelTrainer:
                 
                 best_estimator = grid_search.best_estimator_
                 print(f"Best Estimator: {best_estimator}")
+
 
 
                 

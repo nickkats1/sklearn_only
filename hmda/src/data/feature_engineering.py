@@ -19,7 +19,7 @@ class FeatureEngineering:
             data (DataIngestion): A module for getting data from source.
         """
         self.config = config or load_config()
-        self.data = data or DataIngestion(self.config)
+        self.data = data or DataIngestion(self.config).get_data()
         
     def select_features(self) -> pd.DataFrame:
         """ Select Relevant features based on the paper or ones that explain the dependent variable.
@@ -28,7 +28,8 @@ class FeatureEngineering:
             data (pd.DataFrame): Cleaned data from data ingestion with no missing values, duplicates or irrelevant features.
         """
         try:
-            data = self.data.get_data()
+            
+            data = self.data
             if data is None:
                 raise ValueError("Could not get data from data ingestion.")
             

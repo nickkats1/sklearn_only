@@ -1,26 +1,45 @@
-from src.preprocess.data_ingestion import DataIngestion
-from src.preprocess.data_transformation import DataTransformation
-from src.preprocess.model_trainer import ModelTrainer
+# data
+from src.data.data_ingestion import DataIngestion
+from src.data.feature_engineering import FeatureEngineering
+from src.data.data_transformation import DataTransformation
+
+# model trainer
+from src.models.model_trainer import ModelTrainer
+
+from src.results.evaluation import Evaluation
+from src.results.predict import Predict
+
+# config
 from helpers.config import load_config
 
 
-
-
-
-
-if __name__ == "__main__":
+def main():
+    """Main 'hmda' script"""
+    # config
     config = load_config()
-    # data ingestion
-    data_ingestion_config = DataIngestion(config)
-    data_ingestion_config.fetch_data()
-    data_ingestion_config.cleaning()
-    data_ingestion_config.split()
+    
+    data = DataIngestion(config).get_data()
+    
+    # feature selection
+    data = FeatureEngineering(config).select_features()
     
     # data transformation
-    data_transformation_config = DataTransformation(config)
-    data_transformation_config.standardize_data()
+    X_train_scaled, X_test_scaled = DataTransformation(config).split_and_scale_features()
+    y_train, y_test = DataTransformation(config).split_targets()
     
     # model trainer
-    model_trainer_config = ModelTrainer(config)
-    model_trainer_config.load_params()
-    model_trainer_config.log_into_mlflow()
+    trainer = ModelTrainer(config)
+    trainer.get_best_model()
+    
+    # Evaluate
+    
+    y_pred = [0,1,2,3,4,5,6,7]
+    y_pred_prob = [0,1,0,1,1,1,0,1]
+    y_test = [0,1,2,3,4,5,6,7]
+    eval = Evaluation(config = load_config()).eval_best_model(y_test, y_pred, y_pred_prob)
+    eval
+    
+
+if __name__ == "__main__":
+    main()
+    

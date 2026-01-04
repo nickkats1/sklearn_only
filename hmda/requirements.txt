@@ -1,11 +1,6 @@
-click==8.3.0
-Flask==3.1.2
-flask-cors==6.0.1
-gunicorn==23.0.0
 joblib==1.5.2
 matplotlib==3.10.7
 matplotlib-inline==0.2.1
-mlflow==3.5.1
 numpy==2.3.4
 pandas==2.3.3
 pyaml==25.7.0

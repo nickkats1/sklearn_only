@@ -2,7 +2,6 @@
 from src.data.feature_engineering import FeatureEngineering
 
 # Pandas and Numpy
-import pandas as pd
 import numpy as np
 
 # helpers
@@ -13,10 +12,10 @@ from helpers.logger import logger
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-from typing import Any, Dict, Tuple, Optional
+from typing import Tuple
 
 class DataTransformation:
-    """A utility class to scale training and testing features and split traing and testing features."""
+    """A utility class to scale training and testing features and split training and testing features."""
     
     def __init__(self, config: dict, data: FeatureEngineering | None = None):
         """Initialize DataTransformation class.
@@ -27,7 +26,7 @@ class DataTransformation:
         """
         
         self.config = config or load_config()
-        self.data = data or FeatureEngineering(self.config)
+        self.data = data or FeatureEngineering(self.config).select_features()
         self.scaler = StandardScaler()
         
     def split_and_scale_features(self) -> Tuple[np.ndarray, np.ndarray]:
@@ -41,7 +40,7 @@ class DataTransformation:
             ValueError: If Splitting and scaling features fails.
         """
         try:
-            data = self.data.select_features()
+            data = self.data
             if data is None:
                 raise ValueError("Could not get Features from feature engineering")
             
@@ -62,7 +61,7 @@ class DataTransformation:
             return X_train_scaled, X_test_scaled
         except Exception as exc:
             logger.error("Failed to split and scale features: %s", exc)
-            raise ValueError(f"Could not split and scale data: {exc}") from exc
+            return None, None
         
         
     def split_targets(self) -> Tuple[np.ndarray, np.ndarray]:
@@ -75,7 +74,7 @@ class DataTransformation:
             ValueError: If Splitting targets fails.
         """
         try:
-            data = self.data.select_features()
+            data = self.data
             if data is None:
                 raise ValueError("Could not split targets")
             
@@ -92,5 +91,4 @@ class DataTransformation:
             return y_train, y_test
         except Exception as exc:
             logger.error("Failed to split targets: %s", exc)
-            raise ValueError(f"Could not split targets: {exc}") from exc
-
+            return None, None
