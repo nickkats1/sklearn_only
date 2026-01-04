@@ -1,31 +1,20 @@
 import joblib
 
 from helpers.config import load_config
-from src.data.data_transformation import DataTransformation
-import pandas as pd
-
-from typing import Dict, List, Tuple
 
 from helpers.logger import logger
 
-import numpy as np
 
 class Predict:
-    """Class to predict features from 'model_trainer.py' loaded from .pkl.
-    """
+    """Class to predict features from 'model_trainer.py' loaded from PKL file."""
     
     def __init__(self, config: dict):
-        """
-        Docstring for __init__
+        """Initialize predict class.
         
-        :param self: Description
-        :param config: Description
-        :type config: dict
-        :param model: Description
-        :type model: joblib
-        :return: Description
-        :rtype: List[ndarray[_AnyShape, dtype[Any]]]
+        Args:
+            config (dict): A configuration file.
         """
+        
         self.config = config or load_config()
         self.model = self.config['model_path']
         

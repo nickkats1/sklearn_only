@@ -1,40 +1,30 @@
-"""Data ingestion module.
-
-This module provides functionality for retrieving data from a configured
-URL source and returning it as a pandas DataFrame.
-"""
-
 # import pandas as pd
 import pandas as pd
 
-# config
+# Config logger
 from helpers.config import load_config
 from helpers.logger import logger
-# numpy
-import numpy as np
 
-from typing import Optional, Dict
+
+
 class DataIngestion:
     """Responsible for raw data ingestion."""
 
-    def __init__(self, config: Optional[Dict] = None) -> None:
+    def __init__(self, config: dict):
         """
         Initialize the data ingestion pipeline.
 
         Args:
-            config (Optional[Dict]): Configuration dictionary containing URL
-                links and file paths. If not provided, the default configuration
-                is loaded.
+            config(dict): A configuration file with features, links, targets ect.
         """
         self.config = config or load_config()
 
-    def fetch_raw_data(self) -> Optional[pd.DataFrame]:
+    def fetch_raw_data(self) -> pd.DataFrame:
         """
         Fetch raw airplane data from configured URL sources.
 
         Returns:
-            Optional[pd.DataFrame]: Combined raw dataset if successful,
-            otherwise None.
+            pd.DataFrame: Combined raw dataset if successful.
         """
         try:
             sales_link = self.config["airplane_sales_link"]
@@ -59,7 +49,6 @@ class DataIngestion:
 
             return data
 
-        except FileNotFoundError as exc:
-            logger.error("Data source could not be found: %s", exc)
+        except Exception as exc:
+            logger.error(f"failed to retrieve file from link: {exc}")
             return None
-
