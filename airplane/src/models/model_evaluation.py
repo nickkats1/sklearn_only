@@ -11,15 +11,15 @@ from helpers.logger import logger
 # data transformation
 from src.data.data_transformation import DataTransformation
 
-from typing import Dict
+from typing import List, Any, Dict
 
 # best model
 from sklearn.ensemble import RandomForestRegressor
 
+import pandas as pd
 
 class ModelEvaluation:
-    """Class to evaluate metrics of best model from model trainer with best params.
-    """
+    """Class to evaluate metrics of best model from model trainer with best params."""
     
     def __init__(self, config: dict):
         """Initialize ModelEvaluation class.
@@ -30,16 +30,16 @@ class ModelEvaluation:
         self.config = config or load_config()
         self.scores = []
         
-    def eval_best_model(self, y_test: float, y_pred: float) -> Dict[str, float]:
+    def eval_best_model(self, y_test: List[pd.Series], y_pred: List[pd.Series]) -> List[Dict[str, Any]]:
         """Evaluate metrics from best model from model trainer.
         
         Args:
-            y_test (float): the actual value.
-            y_pred (float): the predicted value.
+            y_test List[pd.Series]: the actual value.
+            y_pred List[pd.Series]: the predicted value.
         """
         try:
             # load in data
-            X_train_scaled, X_test_scaled = DataTransformation(self.config).split_features()
+            X_train_scaled, X_test_scaled = DataTransformation(self.config).split_transform_features()
             
             y_train, y_test = DataTransformation(self.config).split_targets()
             
@@ -66,10 +66,6 @@ class ModelEvaluation:
             self.scores.append({"Mean-Squared Error": mse, "R2 Score": r2})
             
             return self.scores
-        except ImportError as e:
-            logger.info(f"Check Module: {e}")
-        except TypeError as e:
-            logger.info(f"Invalid Type: {e}")
         except Exception as e:
-            logger.error(f"Error! {e}")
-        return None
+            return f"could not return dictionary: {e}"
+        

@@ -1,84 +1,86 @@
-# data ingestion for data
-from src.data.data_ingestion import DataIngestion
+# Feature Engineering
+from src.data.feature_engineering import FeatureEngineering
 
-# logger
-from helpers.logger import logger
-from helpers.config import load_config
-
-# Standard scaler and train_test split
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-
-# numpy and pandas
-import numpy as np
+# pandas numppy
 import pandas as pd
+import numpy as np
 
+# tools
+from helpers.config import load_config
+from helpers.logger import logger
+
+# sklearn
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Typing
 from typing import Tuple
 
+
 class DataTransformation:
-    """A utility class to split the data from data ingestion and scaled the training and testing features."""
+    """Utility class to split features and targets and scale split features"""
     
-    def __init__(self, config: dict):
-        """__init__ data ingestion.
+    def __init__(self, config: dict, data: FeatureEngineering | None = None):
+        """Initialize data transformation class.
         
         Args:
-            config (dict): A config file containing all of the features, targets, url links, paths needs.
+            config (dict): A configuration dictionary.
+            data (FeatureEngineering): Instance of FeatureEngineering class.
         """
         
         self.config = config or load_config()
+        self.data = data or FeatureEngineering(self.config).select_features()
         self.scaler = StandardScaler()
         
-    def split_features(self) -> Tuple[np.ndarray, np.ndarray]:
-        """Split training and testing features and scale them using StandardScaler.
+    def split_transform_features(self) -> Tuple[np.ndarray, np.ndarray]:
+        """Split Features and scale features using Standard Scaler.
         
         Returns:
-            X_train_scaled(np.ndarray): 80% of features with standard scaled applied.
-            X_test_scaled(np.ndarray): 20% of features with standard scaler applied.
+            X_train_scaled, X_test_scaled(Tuple[np.ndarray, np.ndarray]):
+            - X_train_scaled: Training features scaled.
+            - X_test_scaled: testing features scaled.
         """
         try:
-            # load in data from data ingestion.
-            data = DataIngestion(self.config).fetch_raw_data()
             
-        except ImportError or FileNotFoundError as exc:
-            logger.info(f"Could not import data ingestion or file was not found: {exc}")
-        
-        # features
-        try:
-            features = self.config['features']
-        
-            X_train, X_test = train_test_split(data[features], test_size=0.20, random_state=42)
-        
-            # scale training and testing features
-        
+            X_train, X_test = train_test_split(
+                self.data[self.config['features']],
+                test_size=0.20,
+                random_state=42
+                )
+            
+            logger.info("X_train and X_test have been initialized!")
+            
+            # scale X_train and X_test
             X_train_scaled = self.scaler.fit_transform(X_train)
             X_test_scaled = self.scaler.transform(X_test)
-            logger.info(f"Shape of X_train: {X_train.shape}")
-            logger.info(f"Shape of X_test: {X_test_scaled.shape}")
+            
+            logger.info(f"Shape of X_train scaled: {X_train_scaled.shape}")
+            logger.info(f"Shape of X_test_scaled: {X_test_scaled.shape}")
             
             return X_train_scaled, X_test_scaled
-        except Exception as e:
-            logger.info(f"Could not split and scale training and testing features: {e}")
-        return [],[]
-    
-    
+        except Exception as exc:
+            logger.error("Failed Split and transform to features: %s", exc)
+            return None, None
+        
+        
     def split_targets(self) -> Tuple[np.ndarray, np.ndarray]:
-        """Split targets.
+        """Split targets into 80/20 split.
         
         Returns:
-            y_train (np.ndarray): training targets.
-            y_test (np.ndarray): testing targets.
+            y_train, y_test (np.ndarray, np.ndarray):
+            - y_train: 80% of targets.
+            - y_test: 20% of targets.
         """
-        
         try:
-            # targets
-            data = DataIngestion(self.config).fetch_raw_data()
-            targets = self.config['target']
-            
-            y_train, y_test = train_test_split(data[targets], test_size=0.20, random_state=42)
+            y_train, y_test = train_test_split(
+                self.data[self.config['target']],
+                test_size=0.20,
+                random_state=42
+                )
             logger.info(f"Shape of y_train: {y_train.shape}")
             logger.info(f"Shape of y_test: {y_test.shape}")
             return y_train, y_test
-        except Exception as e:
-            logger.info(f"Error splitting targets or error with import DataIngestion or something else: {e}")
-        return None, None
+        except Exception as exc:
+            logger.error("Failed to perform split on targets: %s", exc)
+            return None,None
             

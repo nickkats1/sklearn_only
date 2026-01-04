@@ -7,11 +7,12 @@ from helpers.config import load_config
 
 # sklearn
 from sklearn.linear_model import LinearRegression, Lasso, Ridge
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, BaggingRegressor
-from sklearn.svm import SVR
+from sklearn.ensemble import (
+    RandomForestRegressor,
+    GradientBoostingRegressor,
+    BaggingRegressor
+)
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.neighbors import KNeighborsRegressor
-from xgboost import XGBRegressor
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import r2_score, mean_squared_error
 
@@ -78,22 +79,7 @@ class ModelTrainer:
                     "max_samples": [1.0, 0.8, 0.6],
                     "max_features": [1.0, 0.8, 0.6]
                 },
-                "KNeighborsRegressor_params": {
-                    "n_neighbors": [1,2,3,4,5,6,7,8,9],
-                    "weights": ['uniform', 'distance'],
-                    "algorithm": ['auto', 'ball_tree', 'kd_tree', 'brute'],
-                    "leaf_size": [10, 20, 30]
-                    },
-                "SVR_params": {
-                    "kernel": ['linear', 'poly', 'rbf', 'sigmoid'],
-                    "degree": [0, 1, 2],
-                    "gamma": ['scale', 'auto'],
-                    "verbose": [True, False]
-                },
-                "XGBRegressor_params": {
-                    "booster": ['gbtree', 'gblinear', 'dart'],
-                    "verbosity": [0, 1, 2, 3]
-                },
+                
             }
             models = {
                 "LinearRegression": (LinearRegression(), params["LinearRegression_params"]),
@@ -103,29 +89,23 @@ class ModelTrainer:
                 "RandomForestRegressor": (RandomForestRegressor(), params["RandomForestRegressor_params"]),
                 "DecisionTreeRegressor": (DecisionTreeRegressor(), params["DecisionTreeRegressor_params"]),
                 "BaggingRegressor": (BaggingRegressor(), params["BaggingRegressor_params"]),
-                "KNeighborsRegressor": (KNeighborsRegressor(), params["KNeighborsRegressor_params"]),
-                "SVR": (SVR(), params["SVR_params"]),
-                "XGBRegressor": (XGBRegressor(), params["XGBRegressor_params"])
                 }
             return params, models
-        except TypeError as te:
-            logger.info(f"Invalid params in dictioranl or model: {te}")
-        except ValueError as ve:
-            logger.info(f"Invalid: {ve}")
-        return None
+        except Exception as e:
+            logger.info(f"Could not load models and params: {e}")
         
         
     
-    def log_into_mlflow(self) -> List[Dict[str, Any]]:
+    def train_models(self) -> List[Dict[str, Any]]:
         """Perform GridSearchCV and log models and params and scores into mlflow.
         
         Returns:
-            results (Dict[List[str, Any]]): A dictionary containing results from all models by grisearch
+            results (Dict[List[str, Any]]): A dictionary containing results from all models by GridSearchCV.
         """
         try:
             # load in features and targets
             
-            X_train_scaled, X_test_scaled = DataTransformation(self.config).split_features()
+            X_train_scaled, X_test_scaled = DataTransformation(self.config).split_transform_features()
             y_train, y_test = DataTransformation(self.config).split_targets()
             
             logger.info("X_train, X_test, y_train, and y_test were successfully implementer")
@@ -187,8 +167,6 @@ class ModelTrainer:
                 
                 
             
-        except TypeError as te:
-            logger.info(f"Enter a valid type: {te}")
-        except ImportError as ie:
-            logger.info(f"Invalid import for class: {ie}")
-        return None
+        except Exception as e:
+            logger.error("Could not complete grid search: %s",e)
+            return None
