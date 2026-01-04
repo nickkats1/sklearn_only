@@ -1,64 +1,45 @@
-from helpers.logger import logger
+# Helpers
 from helpers.config import load_config
+from helpers.logger import logger
+
+# Pandas
 import pandas as pd
-from sklearn.model_selection import train_test_split
-import numpy as np
 
 class DataIngestion:
-    def __init__(self,config):
-        self.config = config
+    """Retrieve raw data from url link and save as CSV file."""
+    
+    def __init__(self, config: dict):
+        """Initialize data ingestion class.
         
-    def fetch_data(self):
-        """ Fetch data from url links """
-        # links to datasets
-        try:
-            applications = pd.read_csv(self.config['applications_url'],delimiter=",")
-            demographic = pd.read_csv(self.config['demographic_url'],delimiter=",")
-            credit = pd.read_csv(self.config['credit_url'],delimiter=",")
-            combined = pd.concat([applications,credit,demographic],axis=1)
-            # remove duplicated columns
-            combined = combined.loc[:,~combined.columns.duplicated()].copy()
-            # creating variable utility
-            combined['Utility'] = combined['purchases'] / combined['credit_limit']
-            
-            # creating target variable log odds utility
-            combined['log_odds_utils'] = np.log(combined['Utility']) / (combined['Utility'] - 1)
-            
-            # making homeownership binary
-            combined['homeownership'] = [1 if X == "Rent" else 0 for X in combined['homeownership']] 
-            # drop utility
-            combined.drop("Utility",axis=1,inplace=True)
-            combined = combined.dropna()
-            combined.drop_duplicates(inplace=True)
-            combined.to_csv(self.config['raw_path'],index=0)
-            return combined
-            
-                
-        except Exception as e:
-            logger.exception(f"Could not get link: {e}")
-            raise e
+        Args:
+            config (dict): A configuration file consisting of url paths, model path, features, and target.
+        """
+        self.config = config or load_config()
         
-    def split(self):
-        """ Split training and testing data """
+    def get_data(self) -> pd.DataFrame:
+        """Fetch data and combined from url links.
+        
+        Returns:
+            data (pd.DataFrame): A dataframe fetched from url link.
+        """
         try:
-            #features
-            combined = self.fetch_data()
-            features = combined.drop("log_odds_utils",axis=1)
-            target = combined['log_odds_utils']
-            #train test split
+            # url links
+            credit_url = self.config['credit_url']
+            app_url = self.config['app_url']
+            demo_url = self.config['demo_url']
             
-            df_train,df_test = train_test_split(features,test_size=0.20,random_state=42)
-            df_train.to_csv(self.config['train_raw'],index=0)
-            df_test.to_csv(self.config['test_raw'],index=0)
-            logger.info(f"Shape of df_train: {df_train.shape}")
-            logger.info(f"Shape of df_test: {df_test.shape}")            
-            # split target values
-            y_train_df,y_test_df = train_test_split(target,test_size=.20,random_state=42)
-            y_train_df.to_csv(self.config['train_target_raw'],index=0)
-            y_test_df.to_csv(self.config['test_target_raw'],index=0)
-            logger.info(f'Shape of y_train_df: {y_train_df.shape}')
-            logger.info(f'Shape of y_test_df: {y_test_df.shape}')
-
-        except Exception as e:
-            logger.exception(f'Could not find path: {e}')
-            raise
+            # Read CSV files into dataframe.
+            credit_df = pd.read_csv(credit_url,delimiter=",")
+            app_df = pd.read_csv(app_url, delimiter=",")
+            demo_df = pd.read_csv(demo_url, delimiter=",")
+            
+            # concat data
+            
+            data = pd.concat([credit_df, app_df, demo_df], axis=1)
+            
+            data = data.loc[:, ~data.columns.duplicated()].copy()
+            
+            return data
+        except Exception as exc:
+            logger.error(f"Could not retrieve data from url sources: {exc}")
+            return None
